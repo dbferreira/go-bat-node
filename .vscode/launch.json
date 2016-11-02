@@ -5,7 +5,7 @@
 			"name": "Launch",
 			"type": "node",
 			"request": "launch",
-			"program": "${workspaceRoot}\\build\\firebase-listener.js",
+			"program": "${workspaceRoot}\\firebase-listener.ts",
 			"stopOnEntry": false,
 			"args": [],
 			"cwd": "${workspaceRoot}",
@@ -18,8 +18,8 @@
 				"NODE_ENV": "development"
 			},
 			"console": "internalConsole",
-			"sourceMaps": false,
-			"outFiles": []
+			"sourceMaps": true,
+			"outDir": "${workspaceRoot}\\build"
 		},
 		{
 			"name": "Attach",

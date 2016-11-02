@@ -29,28 +29,34 @@ export function handlePlayerPull(playerData, db: firebase.database.Database): vo
 	createPlayer(playerData.user, db, 16); // Pull a young player from youth league
 }
 
-export function createPlayer(teamID: string, db: firebase.database.Database, age: number): void {
+export function createPlayer(teamID: string, db: firebase.database.Database, age: number, useCountry: string = "ZA"): void {
 	const playerRef = db.ref("players");
 	const playerQueueRef = db.ref("queues/players");
-	const countryKeys = Object.keys(countries);
-	const countryIndex = random.integer(0, countryKeys.length);
-	let useCountry = "ZA";
-	countryKeys.forEach((country, index) => {
-		if (countryIndex === index) {
-			useCountry = country;
+
+	// Have a 1 in 3 chance of assigning a player from another country to this  team 
+	const getCountry = (useCountry: string): string => {
+		const countryKeys = Object.keys(countries);
+		if (random.integer(0, 2) === 1) {
+			const countryIndex = random.integer(0, countryKeys.length);
+			return countryKeys[countryIndex];
+		} else {
+			return useCountry;
 		}
-	});
+	};
+
 	const getRandomRating = (): number => {
 		return Math.round(random.real(1, 7.5, true) * 100) / 100;
 	};
 
-	getRandomPlayerName(useCountry, (playerJSON) => {
+	const country = getCountry(useCountry);
+
+	getRandomPlayerName(country, (playerJSON) => {
 		playerRef.child(teamID)
 			.push({
 				age: age,
 				name: `${playerJSON.name} ${playerJSON.surname}`,
 				created: Date.now(),
-				nationality: useCountry.toLowerCase(),
+				nationality: country.toLowerCase(),
 				team: teamID,
 				batting: getRandomRating(),
 				bowling: getRandomRating(),

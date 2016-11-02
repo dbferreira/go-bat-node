@@ -13,8 +13,8 @@
   "dependencies": {
     "@types/firebase": "^2.4.30",
     "@types/random-js": "^1.0.28",
+    "@types/request": "0.0.32",
     "firebase": "^3.5.2",
-    "promise": "^7.1.1",
     "random-js": "^1.0.8",
     "request": "^2.76.0"
   },

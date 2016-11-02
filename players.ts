@@ -26,17 +26,17 @@ function getRandomPlayerName(region: string, callback: Function, retryCount: num
 }
 
 export function handlePlayerPull(playerData, db: firebase.database.Database): void {
-	createPlayer(playerData.user, db, 16); // Pull a young player from youth league
+	createPlayer(playerData.user, db, 16, playerData.region); // Pull a young player from youth league
 }
 
 export function createPlayer(teamID: string, db: firebase.database.Database, age: number, useCountry: string = "ZA"): void {
 	const playerRef = db.ref("players");
 	const playerQueueRef = db.ref("queues/players");
 
-	// Have a 1 in 3 chance of assigning a player from another country to this  team 
+	// Have a 1 in 2 chance of assigning a player from another country to this  team 
 	const getCountry = (useCountry: string): string => {
 		const countryKeys = Object.keys(countries);
-		if (random.integer(0, 2) === 1) {
+		if (random.integer(0, 1) === 1) {
 			const countryIndex = random.integer(0, countryKeys.length);
 			return countryKeys[countryIndex];
 		} else {

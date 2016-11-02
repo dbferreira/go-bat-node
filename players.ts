@@ -54,14 +54,15 @@ export function createPlayer(teamID: string, db: firebase.database.Database, age
 		playerRef.child(teamID)
 			.push({
 				age: age,
-				name: `${playerJSON.name} ${playerJSON.surname}`,
+				name: playerJSON.name,
+				surname: playerJSON.surname,
 				created: Date.now(),
 				nationality: country.toLowerCase(),
 				team: teamID,
 				batting: getRandomRating(),
 				bowling: getRandomRating(),
 				stamina: getRandomRating(),
-				fitness: 5,
+				fitness: random.integer(3, 7)
 			})
 			.then((result) => playerQueueRef.child(teamID).remove());
 	});

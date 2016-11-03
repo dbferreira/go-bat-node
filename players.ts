@@ -1,28 +1,17 @@
 import * as Random from "random-js";
-import * as request from "request";
+import * as playerNames from "./player-names";
 
 const random = new Random(Random.engines.mt19937().autoSeed());
-const countries = {
-	"ZA": "Netherlands",
-	"ZW": "Canada",
-	"AU": "Australia",
-	"NZ": "New+Zealand",
-	"GB": "England",
-	"IN": "India",
-	"LK": "India",
-	"PK": "Pakistan"
-};
 
-function getRandomPlayerName(region: string, callback: Function, retryCount: number = 2): void {
-	const url = `http://uinames.com/api/?gender=male&region=${countries[region]}`;
-	request(url, (error, response, body) => {
-		if (!error && response.statusCode === 200) {
-			callback(JSON.parse(body));
-		} else {
-			console.log("Error fetching player name, retrying another", retryCount, "times (statusCode:", response.statusCode, ")");
-			retryCount > 0 ? getRandomPlayerName(region, callback, --retryCount) : console.log("Failed after third attempt, stopping... ");
-		}
-	});
+// Have a 1 in 2 chance of assigning a player from another country to this  team
+function getCountry(useCountry: string): string {
+	const countryKeys = Object.keys(playerNames.countries);
+	if (random.integer(0, 1) === 1) {
+		const countryIndex = random.integer(0, countryKeys.length);
+		return countryKeys[countryIndex];
+	} else {
+		return useCountry;
+	}
 }
 
 export function handlePlayerPull(playerData, db: firebase.database.Database): void {
@@ -32,39 +21,30 @@ export function handlePlayerPull(playerData, db: firebase.database.Database): vo
 export function createPlayer(teamID: string, db: firebase.database.Database, age: number, useCountry: string = "ZA"): void {
 	const playerRef = db.ref("players");
 	const playerQueueRef = db.ref("queues/players");
-
-	// Have a 1 in 2 chance of assigning a player from another country to this  team 
-	const getCountry = (useCountry: string): string => {
-		const countryKeys = Object.keys(countries);
-		if (random.integer(0, 1) === 1) {
-			const countryIndex = random.integer(0, countryKeys.length);
-			return countryKeys[countryIndex];
-		} else {
-			return useCountry;
-		}
-	};
-
+	const country = getCountry(useCountry);
 	const getRandomRating = (): number => {
 		return Math.round(random.real(1, 7.5, true) * 100) / 100;
 	};
 
-	const country = getCountry(useCountry);
-
-	getRandomPlayerName(country, (playerJSON) => {
-		playerRef.child(teamID)
-			.push({
-				age: age,
-				name: playerJSON.name,
-				surname: playerJSON.surname,
-				created: Date.now(),
-				nationality: country.toLowerCase(),
-				team: teamID,
-				batting: getRandomRating(),
-				bowling: getRandomRating(),
-				stamina: getRandomRating(),
-				fitness: random.integer(3, 7)
-			})
-			.then((result) => playerQueueRef.child(teamID).remove());
+	playerNames.getRandomPlayerName(country, db, (playerJSON) => {
+		if (playerJSON) {
+			playerRef.child(teamID)
+				.push({
+					age: age,
+					name: playerJSON.name,
+					surname: playerJSON.surname,
+					created: Date.now(),
+					nationality: country.toLowerCase(),
+					team: teamID,
+					batting: getRandomRating(),
+					bowling: getRandomRating(),
+					stamina: getRandomRating(),
+					fitness: random.integer(3, 7)
+				})
+				.then((result) => playerQueueRef.child(teamID).remove());
+		} else {
+			createPlayer(teamID, db, age, useCountry); // This here will cause an infinite loop if the name server is down. Rather get player name from firebase.
+		}
 	});
 }
 

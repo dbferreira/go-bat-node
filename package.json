@@ -4,8 +4,8 @@
   "description": "NodeJS implementation of the Go-bat system backend",
   "main": "firebase.js",
   "scripts": {
-    "start": "tsc || node build/firebase-listener.js",
-    "dev": "nodemon build/firebase-listener.js",
+    "start": "tsc || node build/go-bat-node.js",
+    "dev": "nodemon build/go-bat-node.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "D Ferreira",
@@ -15,6 +15,7 @@
     "@types/random-js": "^1.0.28",
     "@types/request": "0.0.32",
     "firebase": "^3.5.2",
+    "node-cron": "^1.1.2",
     "random-js": "^1.0.8",
     "request": "^2.76.0"
   },

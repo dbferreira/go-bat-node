@@ -20,9 +20,13 @@ export function getRandomPlayerName(region: string, db: firebase.database.Databa
 	const url = `http://uinames.com/api/?gender=male&region=${countries[region]}`;
 	request(url, (error, response, body) => {
 		if (!error && response.statusCode === 200) {
-			const player = <UINamesPlayer>JSON.parse(body);
-			storeNameData(region, player, db);
-			callback(player);
+			try {
+				const player = <UINamesPlayer>JSON.parse(body);
+				storeNameData(region, player, db);
+				callback(player);
+			} catch (error) {
+				getRandomPlayerName(region, db, callback, --retryCount);
+			}
 		} else {
 			console.log("Error fetching player name, retrying another", retryCount, "times (statusCode:", response.statusCode, ")");
 			if (retryCount > 0) {

@@ -1,6 +1,6 @@
 import * as cron from "node-cron";
 
-export default function initFirebaseCron(db: firebase.database.Database): void {
+export default function initFirebaseCron(db: any): void {
 	cron.schedule('* 1 * * *', () => {
 		console.log("Checking for duplicates...");
 		removeDuplicateNames(db);

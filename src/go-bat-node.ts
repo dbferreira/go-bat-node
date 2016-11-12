@@ -1,12 +1,16 @@
 import * as firebase from "firebase";
 import initFirebaseListener from "./firebase-listener";
 import initFirebaseCron from "./firebase-cron";
+import * as admin from "firebase-admin";
 
-firebase.initializeApp({
-	serviceAccount: "../go-bat-firebase.json",
+const serviceAccount = require("../../go-bat-firebase.json");
+
+admin.initializeApp({
+	credential: admin.credential.cert(serviceAccount),
 	databaseURL: "https://go-bat.firebaseio.com"
 });
-const db = firebase.database();
+
+const db = admin.database();
 
 // Start firebase listener
 initFirebaseListener(db);

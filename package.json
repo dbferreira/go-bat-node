@@ -15,11 +15,14 @@
     "@types/random-js": "^1.0.28",
     "@types/request": "0.0.32",
     "firebase": "^3.5.2",
+    "firebase-admin": "^4.0.1",
     "node-cron": "^1.1.2",
     "random-js": "^1.0.8",
     "request": "^2.76.0"
   },
   "devDependencies": {
+    "@types/chai": "^3.4.34",
+    "@types/es6-shim": "^0.31.32",
     "nodemon": "^1.11.0"
   }
 }

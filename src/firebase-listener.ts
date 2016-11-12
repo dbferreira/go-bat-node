@@ -1,7 +1,7 @@
 import createTeam from "./teams";
 import * as players from "./players";
 
-export default function initFirebase(db: firebase.database.Database): void {
+export default function initFirebase(db: any): void {
 	const teamQueueRef = db.ref("queues/teams");
 	const playerQueueRef = db.ref("queues/players");
 

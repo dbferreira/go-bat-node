@@ -1,6 +1,7 @@
 import * as cron from "node-cron";
 
 export default function initFirebaseCron(db: any): void {
+	// Remove duplicate names and surnames every hour
 	cron.schedule('* 1 * * *', () => {
 		console.log("Checking for duplicates...");
 		removeDuplicateNames(db);

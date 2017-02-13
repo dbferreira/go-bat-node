@@ -5,4 +5,5 @@ services:
         volumes:
             - .:/usr/src/nodeapp
             - ../:/usr/src/firebasekey
+            - /usr/src/nodeapp/node_modules
         command: npm run dev

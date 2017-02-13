@@ -1,0 +1,7 @@
+version: "3"
+services:
+    nodeapp:
+        build: .
+        volumes:
+            - .:/usr/src/nodeapp
+        command: npm start

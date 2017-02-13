@@ -2,7 +2,6 @@
   "name": "go-bat-node",
   "version": "0.0.1",
   "description": "NodeJS implementation of the Go-bat system backend",
-  "main": "firebase.js",
   "scripts": {
     "start": "tsc || node build/go-bat-node.js",
     "dev": "nodemon build/go-bat-node.js",

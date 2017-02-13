@@ -2,7 +2,6 @@ import * as players from './players';
 import * as Random from "random-js";
 
 const random = new Random(Random.engines.mt19937().autoSeed());
-const teamSize = 15;
 
 export function arrangeFixture(fixtureData, db: firebase.database.Database): void {
 	const matchRef = db.ref("matches");

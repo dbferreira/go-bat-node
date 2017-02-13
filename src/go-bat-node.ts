@@ -3,7 +3,7 @@ import initFirebaseListener from "./firebase-listener";
 import initFirebaseCron from "./firebase-cron";
 import * as admin from "firebase-admin";
 
-const serviceAccount = require("../../go-bat-firebase.json");
+const serviceAccount = require("../../firebasekey/go-bat-firebase.json");
 
 admin.initializeApp({
 	credential: admin.credential.cert(serviceAccount),

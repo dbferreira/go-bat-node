@@ -4,7 +4,7 @@
   "description": "NodeJS implementation of the Go-bat system backend",
   "scripts": {
     "start": "tsc || node build/go-bat-node.js",
-    "dev": "nodemon build/go-bat-node.js",
+    "dev": "concurrently --kill-others \"tsc\" \"nodemon build/go-bat-node.js\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "D Ferreira",
@@ -22,6 +22,8 @@
   "devDependencies": {
     "@types/chai": "^3.4.34",
     "@types/es6-shim": "^0.31.32",
-    "nodemon": "^1.11.0"
+    "concurrently": "^3.3.0",
+    "nodemon": "^1.11.0",
+    "typescript": "^2.1.6"
   }
 }
